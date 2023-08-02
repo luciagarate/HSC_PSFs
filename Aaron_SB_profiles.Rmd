@@ -1,0 +1,229 @@
+---
+title: "Aaron_SB_profiles"
+output: html_document
+date: "2023-06-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r echo=FALSE}
+library(ProFound)
+library(ProFit)
+library(Rfits)
+library(Rwcs)
+library(data.table)
+library(Highlander)
+library(cmaes)
+library(cmaeshpc)
+library(celestial)
+library(plotrix)
+```
+
+
+```{r}
+check = Rfits_read_image('~/Documents/PhD_Perth/PSF_paper/Crisitna_group_IHL_profile/PDR2/coadd+bg-HSC-R-8524-pdr2_dud-230607-014440.fits', ext=2)
+#check_zoom = check[8575/2, 8571/2, box=999] + 0.001721 #CM sky fix, = -0.001721, por eso lo sumo
+check_zoom = check[35.8357044, -5.4531844,999, type='coord'] + 0.001721
+check_zoom_pro = profoundProFound(check_zoom, sky=0, box=200, plot=T, magzero=27)
+sky_med = median(check_zoom_pro$sky[check_zoom_pro$objects == 0L]) #this is about 0.00355!!
+#check_zoom$imDat = check_zoom$imDat - sky_med #termina haciendo: +0.001721 - sky_med = -0.003071973
+
+modSB = 0.06636 + 0.294962 + 10*log10(1 + 0.21007943) #to be subtracted from raw! A - K - SB dimming
+
+temp_grid = data.frame(expand.grid(-499:499, -499:499))
+temp_grid$rad_pix = sqrt(temp_grid[,1]^2 + temp_grid[,2]^2)
+temp_grid$rad_asec = temp_grid$rad_pix*pixscale(check_zoom)
+temp_grid$rad_kpc = temp_grid$rad_asec*cosdistAngScale(0.21007943, ref='planck')
+temp_grid$flux = as.numeric(check_zoom$imDat)
+
+sel = check_zoom_pro$objects == 0L #pongo 0 en los objetos
+
+rad_pix_run = magrun(temp_grid$rad_pix, temp_grid$flux, equalN=F, bins = 100)
+rad_asec_run = magrun(temp_grid$rad_asec, temp_grid$flux, equalN=F, bins = 100)
+rad_kpc_run = magrun(temp_grid$rad_kpc, temp_grid$flux, equalN=F, bins = 100)
+
+rad_pix_run_mask = magrun(temp_grid$rad_pix[sel], temp_grid$flux[sel], equalN=F, bins = 100)
+rad_asec_run_mask = magrun(temp_grid$rad_asec[sel], temp_grid$flux[sel], equalN=F, bins = 100)
+rad_kpc_run_mask = magrun(temp_grid$rad_kpc[sel], temp_grid$flux[sel], equalN=F, bins = 100)
+```
+
+
+
+
+
+
+```{r}
+# Mod SB with Cristinas sky and cristinas correction
+
+magplot(rad_pix_run$x, profoundFlux2SB(rad_asec_run$y, magzero=27, pixscale=pixscale(check_zoom)) - modSB, type='l', log='', ylim=c(30,20), xlab='Rad / pix', ylab='SB [mod CM sky]')
+lines(rad_pix_run_mask$x, profoundFlux2SB(rad_asec_run_mask$y, magzero=27, pixscale=pixscale(check_zoom)) - modSB, lty=2)
+legend('topright', legend=c('All pixels', 'Non ProFound Objext Pixels'), lty=c(1,2))
+
+```
+
+
+```{r}
+cristinas_IHL_SB = read.csv('~/Documents/PhD_Perth/PSF_paper/3_technique_core_masked/Cristinas_group/IHL_SB_profile.csv')
+cristinas_Group_IHL_SB = read.csv('~/Documents/PhD_Perth/PSF_paper/3_technique_core_masked/Cristinas_group/Group_SB_profile.csv')
+
+cristinas_Group_IHL_SB_x = c (1.247974, 1.5397082658022665,cristinas_Group_IHL_SB[,1])/pixscale(check_zoom)
+cristinas_Group_IHL_SB_y = c (19.28889, 19.604938271604937,cristinas_Group_IHL_SB[,2])
+
+cristinas_Group_IHL_SB_x <- cristinas_Group_IHL_SB_x[1:(length(cristinas_Group_IHL_SB_x)-1)]
+cristinas_Group_IHL_SB_y <- cristinas_Group_IHL_SB_y[1:(length(cristinas_Group_IHL_SB_y)-1)]
+
+cristinas_IHL_SB_x = cristinas_IHL_SB[,1]/pixscale(check_zoom)
+cristinas_IHL_SB_y = cristinas_IHL_SB[,2]
+
+plot(cristinas_IHL_SB_x, cristinas_IHL_SB_y) #solo ihl
+plot(cristinas_Group_IHL_SB_x, cristinas_Group_IHL_SB_y) #grupo + IHL
+
+cristinas_IHL_SB_y = cristinas_IHL_SB[,2]
+```
+
+
+
+
+
+```{r}
+#non masked stars:
+#Rfits_write_image(check_zoom, filename='~/Documents/PhD_Perth/PSF_paper/Crisitna_group_IHL_profile/PDR2/Aaron_code/coadd+bg-HSC-R-CENTRO_CRISTINA_MLSKY_nonmaskedstars.fits') #sin enmascarar
+
+Table_SB_Cristina_Notebook_nonmaskedstars = Rfits_read_table('~/Documents/PhD_Perth/PSF_paper/Crisitna_group_IHL_profile/PDR2/Aaron_code/SB_Cristina_Notebook_MLCENTER_MLSKY_nonmaskedstars.fits')
+
+
+#borro los dos ultimos valores y el segundo valor tambien de r y sb porque dan feos
+Table_SB_Cristina_Notebook_r_nonmaskedstars <- head(Table_SB_Cristina_Notebook_nonmaskedstars$r, -1)
+Table_SB_Cristina_Notebook_r_nonmaskedstars <- head(Table_SB_Cristina_Notebook_r_nonmaskedstars, -1)
+Table_SB_Cristina_Notebook_r_nonmaskedstars <- Table_SB_Cristina_Notebook_r_nonmaskedstars[-2]
+
+
+Table_SB_Cristina_Notebook_SB_nonmaskedstars <- head(Table_SB_Cristina_Notebook_nonmaskedstars$sb, -1)
+Table_SB_Cristina_Notebook_SB_nonmaskedstars <- head(Table_SB_Cristina_Notebook_SB_nonmaskedstars, -1)
+Table_SB_Cristina_Notebook_SB_nonmaskedstars <- Table_SB_Cristina_Notebook_SB_nonmaskedstars[-2]
+
+
+
+pdf(paste0('~/Documents/PhD_Perth/PSF_paper/Crisitna_group_IHL_profile/PDR2/Aaron_code/Comparison_SB_profile.pdf'),height=6, width = 10.75)
+par(mfrow=c(1,2))
+magplot(rad_pix_run$x, profoundFlux2SB(rad_pix_run$y, magzero=27, pixscale=pixscale(check_zoom)) - modSB, type='l', log='', ylim=c(30,20), xlab='Rad / pix', ylab='SB [mod CM sky]')
+lines(rad_pix_run_mask$x, profoundFlux2SB(rad_pix_run_mask$y, magzero=27, pixscale=pixscale(check_zoom)) - modSB, lty=2)
+legend('topright', legend=c('All pixels', 'Non ProFound Objext Pixels', 'Group + IHL M.L et al 2023', 'IHL M.L et al 2023','All pixels and ML method'), lty=c(1,2,1,2,1), col=c('black', 'black', 'magenta', 'darkgreen', 'orange'),cex=.6)
+
+lines(cristinas_Group_IHL_SB_x, cristinas_Group_IHL_SB_y, col='magenta')
+lines(cristinas_IHL_SB_x, cristinas_IHL_SB_y, col='darkgreen', lty=2)
+
+lines(Table_SB_Cristina_Notebook_r_nonmaskedstars, Table_SB_Cristina_Notebook_SB_nonmaskedstars ,type = "l", cex.axis=.5, cex.lab=.55, xlab='Radius [pix]', ylab = expression(IHL~flux),xlim=c(10,1000), col="darkorange", log='y')
+
+magimage(check_zoom$imDat, qdiff=T, xlab='Rad / pix', ylab='Rad / pix')
+dev.off()
+
+pdf(paste0('~/Documents/PhD_Perth/PSF_paper/Crisitna_group_IHL_profile/PDR2/Aaron_code/Comparison_SB_profile_noIHL.pdf'),height=6, width = 10.75)
+par(mfrow=c(1,2))
+magplot(rad_pix_run$x, profoundFlux2SB(rad_pix_run$y, magzero=27, pixscale=pixscale(check_zoom)) - modSB, type='l', log='', ylim=c(30,20), xlab='Rad / pix', ylab='SB [mod CM sky]')
+
+legend('topright', legend=c('All pixels', 'Group + IHL M.L et al 2023', 'All pixels and ML method'), lty=c(1,1,1), col=c('black','magenta', 'orange'),cex=.6)
+
+lines(cristinas_Group_IHL_SB_x, cristinas_Group_IHL_SB_y, col='magenta')
+
+
+lines(Table_SB_Cristina_Notebook_r_nonmaskedstars, Table_SB_Cristina_Notebook_SB_nonmaskedstars ,type = "l", cex.axis=.5, cex.lab=.55, xlab='Radius [pix]', ylab = expression(IHL~flux),xlim=c(10,1000), col="darkorange", log='y')
+
+magimage(check_zoom$imDat, qdiff=T, xlab='Rad / pix', ylab='Rad / pix')
+dev.off()
+```
+
+
+```{r}
+mask_1 = profoundApplyMask(check_zoom$imDat, xcen = c(999), ycen = c(1), xsize = c(1201), ysize = c(1201))
+check_zoom_mask = check_zoom
+check_zoom_mask$imDat[mask_1$mask==1] = NA
+
+
+temp_grid_mask = data.frame(expand.grid(-499:499, -499:499))
+temp_grid_mask$rad_pix = sqrt(temp_grid_mask[,1]^2 + temp_grid_mask[,2]^2)
+temp_grid_mask$flux = as.numeric(check_zoom_mask$imDat)
+
+sel = check_zoom_pro$objects == 0L #pongo 0 en los objetos
+
+rad_pix_run_mask = magrun(temp_grid_mask$rad_pix, temp_grid_mask$flux, equalN=F, bins = 100)
+
+rad_pix_run_mask_mask = magrun(temp_grid_mask$rad_pix[sel], temp_grid_mask$flux[sel], equalN=F, bins = 100)
+
+
+#estos archivos son para la jupyter notebook: Cristina SB related to Aaron_code folder
+
+#dist_map = Rfits_read_image('/Volumes/BRAIDY/HSC_stuff/dist_map_fix_luciaWCS.fits')
+#dist_map = dist_map[35.8357044, -5.4531844, 999, type='coord']
+
+#Rfits_write_image(check_zoom_mask, filename='~/Documents/PhD_Perth/PSF_paper/Crisitna_group_IHL_profile/PDR2/Aaron_code/coadd+bg-HSC-R-CENTRO_CRISTINA_MLSKY_masked.fits') #le sumo sky_med asi vuelvo al sky de ml
+#Rfits_write_image(dist_map$imDat, filename='~/Documents/PhD_Perth/PSF_paper/Crisitna_group_IHL_profile/PDR2/Aaron_code/dist_map_CENTRO_CRISTINA.fits')
+```
+
+```{r}
+#abro tabla que sale de jupyter notebook Cristina SB related to Aaron_code folder, donde le di el dist map centrado en centro cristina, y la imagen con la estrella enmascarada centrada en centro cristina y con cielo de profound optimo
+
+Table_SB_Cristina_Notebook_masked = Rfits_read_table('~/Documents/PhD_Perth/PSF_paper/Crisitna_group_IHL_profile/PDR2/Aaron_code/SB_Cristina_Notebook_MLCENTER_MLSKY_masked.fits') 
+
+
+#borro los dos ultimos valores y el segundo valor tambien de r y sb porque dan feos
+Table_SB_Cristina_Notebook_r_masked <- head(Table_SB_Cristina_Notebook_masked$r, -1)
+Table_SB_Cristina_Notebook_r_masked <- head(Table_SB_Cristina_Notebook_r_masked, -1)
+Table_SB_Cristina_Notebook_r_masked <- Table_SB_Cristina_Notebook_r_masked[-2]
+
+
+Table_SB_Cristina_Notebook_SB_masked <- head(Table_SB_Cristina_Notebook_masked$sb, -1)
+Table_SB_Cristina_Notebook_SB_masked <- head(Table_SB_Cristina_Notebook_SB_masked, -1)
+Table_SB_Cristina_Notebook_SB_masked <- Table_SB_Cristina_Notebook_SB_masked[-2]
+
+plot(Table_SB_Cristina_Notebook_r_masked, Table_SB_Cristina_Notebook_SB_masked) #esta en pixels el radio
+
+
+```
+
+```{r}
+pdf(paste0('~/Documents/PhD_Perth/PSF_paper/Crisitna_group_IHL_profile/PDR2/Aaron_code/Comparison_SB_profile_mask_3.pdf'),height=6, width = 10.75)
+par(mfrow=c(1,2))
+magplot(rad_pix_run_mask$x, profoundFlux2SB(rad_pix_run_mask$y, magzero=27, pixscale=pixscale(check_zoom)) - modSB, type='l', log='', ylim=c(30,20), xlab='Rad / pix', ylab='SB [mod CM sky]', xlim=c(0,700))
+lines(rad_pix_run_mask_mask$x, profoundFlux2SB(rad_pix_run_mask_mask$y, magzero=27, pixscale=pixscale(check_zoom)) - modSB, lty=2)
+legend('topright', legend=c('All pixels w/masked star', 'Non ProFound Objext Pixels w/masked star', 'Group + IHL M.L et al 2023', 'IHL M.L et al 2023','All pixels w/masked star and ML method'), lty=c(1,2,1,2,1), col=c('black', 'black', 'magenta', 'darkgreen', 'orange'),cex=.6)
+
+lines(cristinas_Group_IHL_SB_x, cristinas_Group_IHL_SB_y, col='magenta')
+lines(cristinas_IHL_SB_x, cristinas_IHL_SB_y, col='darkgreen', lty=2)
+
+lines(Table_SB_Cristina_Notebook_r_masked, Table_SB_Cristina_Notebook_SB_masked ,type = "l", cex.axis=.5, cex.lab=.55, xlab='Radius [pix]', ylab = expression(IHL~flux),xlim=c(10,1000), col="darkorange", log='y')
+
+magimage(check_zoom_mask$imDat, qdiff=T, xlab='Rad / pix', ylab='Rad / pix')
+dev.off()
+
+```
+
+```{r}
+pdf(paste0('~/Documents/PhD_Perth/PSF_paper/Crisitna_group_IHL_profile/PDR2/Aaron_code/Comparison_SB_profile_mask_3_noIHL.pdf'),height=6, width = 10.75)
+par(mfrow=c(1,2))
+magplot(rad_pix_run_mask$x, profoundFlux2SB(rad_pix_run_mask$y, magzero=27, pixscale=pixscale(check_zoom)) - modSB, type='l', log='', ylim=c(30,20), xlab='Rad / pix', ylab='SB [mod CM sky]', xlim=c(0,700))
+
+legend('topright', legend=c('All pixels w/masked star', 'Group + IHL M.L et al 2023', 'All pixels w/masked star and ML method'), lty=c(1,1,1), col=c('black','magenta', 'orange'),cex=.6)
+
+lines(cristinas_Group_IHL_SB_x, cristinas_Group_IHL_SB_y, col='magenta')
+
+
+lines(Table_SB_Cristina_Notebook_r_masked, Table_SB_Cristina_Notebook_SB_masked,type = "l", cex.axis=.5, cex.lab=.55, xlab='Radius [pix]', ylab = expression(IHL~flux),xlim=c(0,1000), col="darkorange", log='y')
+
+magimage(check_zoom_mask$imDat, qdiff=T, xlab='Rad / pix', ylab='Rad / pix')
+dev.off()
+
+```
+
+
+
+
+
+
+
+
+
+
