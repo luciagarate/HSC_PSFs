@@ -4,7 +4,7 @@ library(Rfits)
 library(ProFound)
 library(doParallel)
 library(foreach)
-#library(imager)
+
 
 
 region = 'G02'
@@ -92,4 +92,4 @@ stack_combine = stack_combine + stack_combine[,4001:1] + stack_combine[4001:1,] 
 
 stack_combine/sum(stack_combine) #normalise to 1 the flux of each PSF
 
-Rfits_write_image(stack_combine, filename = paste0('/Path2StarFits/Combined_Star_Stack_',band,'_',region,'.fits'))
+Rfits_write_image(stack_combine, filename = paste0('/Path2PSFs/Combined_Star_Stack_',band,'_',region,'.fits'))
