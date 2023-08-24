@@ -1,8 +1,0 @@
-# HSC-SSP PDR3 extended PSFs
-
-<!-- badges: start -->
-![R-CMD-check](https://github.com/asgr/ProFound/workflows/R-CMD-check/badge.svg)
-<!-- badges: end -->
-
-## Synopsis
-
