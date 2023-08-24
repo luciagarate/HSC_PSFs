@@ -1,10 +1,8 @@
----
-title: HSC-SSP PDR3 extended PSFs
-author: lucia.garatenunez@research.uwa.edu.au
-date: 24/02/2023
-output: html_document
----
+# HSC-SSP PDR3 extended PSFs
+
+<!-- badges: start -->
+![R-CMD-check](https://github.com/asgr/ProFound/workflows/R-CMD-check/badge.svg)
+<!-- badges: end -->
 
 ## Synopsis
-
 
