@@ -1,14 +1,4 @@
----
-title: "README"
-output: html_document
-date: "2023-08-24"
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## HSC-SSP PDR3 extended PSFs
+### HSC-SSP PDR3 extended PSFs
 
 
 
