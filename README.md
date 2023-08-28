@@ -30,6 +30,9 @@ Once the  **R** installer has finished, the recommendation is to use the **R** i
 
 
 ##  R packages:
+The two required packages that are not available to download from CRAN are **ProFound** and **ProPane**:
+#### ProFound
+#### ProPane
 
 
 
