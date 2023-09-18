@@ -285,7 +285,7 @@ stack_inner$stdev = stack_inner_sd$image
 Rfits_write(stack_inner, filename = paste0('/Path2StarFits/Inner_Star_Stack_',region,'_',band,'.fits'))
 
 
-                                       ###########COREE STACK###########
+                                       ###########CORE STACK###########
 
 dummy = foreach(ID = good_match_core$bestmatch[,1])%dopar%{
   good_star = Rfits_read_image(temp_scan[good_match_core$ID[ID,1],"full"], ext=2)
