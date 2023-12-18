@@ -69,14 +69,14 @@ stack_core = Rfits_read(paste0('/Path2StarFits/Core_Star_Stack_',region,'_',band
 outer_rad = (dim(stack_outer$image)[1] - 1L)/2
 sel_grid_o = expand.grid(-outer_rad:outer_rad, -outer_rad:outer_rad)
 sel_grid_o[,3] = sqrt(sel_grid_o[,1]^2 + sel_grid_o[,2]^2)
-sel_pix_o = which(sel_grid_o[,3]> 20 & sel_grid_o[,3] < 30) #normalise the outer+ middle+inner combination and the core stack w/this annulus
+sel_pix_o = which(sel_grid_o[,3]> 5 & sel_grid_o[,3] < 30) #normalise the outer+ middle+inner combination and the core stack w/this annulus
 scale_o = median(stack_combine[sel_pix_o], na.rm = TRUE)
 stack_combine = stack_combine/scale_o
 
 core_rad = (dim(stack_core$image)[1] - 1L)/2
 sel_grid_c = expand.grid(-core_rad:core_rad, -core_rad:core_rad) #entre -100 y 100
 sel_grid_c[,3] = sqrt(sel_grid_c[,1]^2 + sel_grid_c[,2]^2)
-sel_pix_c = which(sel_grid_c[,3]> 20 & sel_grid_c[,3] < 30)
+sel_pix_c = which(sel_grid_c[,3]> 5 & sel_grid_c[,3] < 30)
 scale_c = median(stack_core$image$imDat[sel_pix_c], na.rm = TRUE)
 stack_core$image$imDat = stack_core$image$imDat/scale_c
 
@@ -87,7 +87,7 @@ fill_c = which(sel_grid_c[,3] < 20)
 stack_combine[fill_o] = stack_core$image$imDat[fill_c] #final combination = PSF
 
 #A few final details:
-#Apply a symmetric process by making horizontal, vertical an diagonal reflections to obtain a symmetric PSF:
+#Apply a symmetric process by making horizontal, vertical an diagonal reflections to obtain a symmetric PSF: (comment if the user does not want to symmetrise the PSF)
 stack_combine = stack_combine + stack_combine[,4001:1] + stack_combine[4001:1,] + stack_combine[4001:1,4001:1]
 
 stack_combine/sum(stack_combine) #normalise to 1 the flux of each PSF
