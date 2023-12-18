@@ -159,17 +159,17 @@ if(region == 'G09'){
 if(region == 'G15'){
   index_delete = which(list_IDs == 21 | list_IDs == 23  | list_IDs == 26 | list_IDs == 32 | list_IDs == 38 | list_IDs == 47 | list_IDs == 54 | list_IDs == 67)
   list_IDs = list_IDs[-rbind(index_delete)]
-if(band == 'r'){
-  index_delete = which(list_IDs == 2 | list_IDs == 9 | list_IDs == 14 |list_IDs == 19 | list_IDs == 21 | list_IDs == 23  | list_IDs == 26 |list_IDs == 27 |list_IDs == 28 | list_IDs == 31 |list_IDs == 32 | list_IDs == 33 |list_IDs == 36 |list_IDs == 38 | list_IDs == 39 |list_IDs == 42  | list_IDs == 45  |list_IDs == 47 | list_IDs == 54 | list_IDs == 57  |list_IDs == 67)
-  list_IDs = list_IDs[-rbind(index_delete)]
+  if(band == 'r'){
+      index_delete = which(list_IDs == 2 | list_IDs == 9 | list_IDs == 14 |list_IDs == 19 | list_IDs == 21 | list_IDs == 23  | list_IDs == 26 |list_IDs == 27 |list_IDs == 28 | list_IDs == 31 |list_IDs == 32 | list_IDs == 33 |list_IDs == 36 |list_IDs == 38 | list_IDs == 39 |list_IDs == 42  | list_IDs == 45  |list_IDs == 47 | list_IDs == 54 | list_IDs == 57  |list_IDs == 67)
+    list_IDs = list_IDs[-rbind(index_delete)]
   }
   if(band == 'Y'){
-     index_delete = which(list_IDs == 2 | list_IDs == 14 |list_IDs == 17 | list_IDs == 19 |list_IDs == 27 | list_IDs == 28  | list_IDs == 30 |list_IDs == 33 |list_IDs == 34 | list_IDs == 39 |list_IDs == 45 | list_IDs == 41)
-     list_IDs = list_IDs[-rbind(index_delete)]
+      index_delete = which(list_IDs == 2 | list_IDs == 14 |list_IDs == 17 | list_IDs == 19 |list_IDs == 27 | list_IDs == 28  | list_IDs == 30 |list_IDs == 33 |list_IDs == 34 | list_IDs == 39 |list_IDs == 45 | list_IDs == 41)
+      list_IDs = list_IDs[-rbind(index_delete)]
   }
   if(band == 'Z'){
-     index_delete = which(list_IDs == 1 | list_IDs == 2 |list_IDs == 9 | list_IDs == 14 |list_IDs == 17 | list_IDs == 57)
-     list_IDs = list_IDs[-rbind(index_delete)]
+      index_delete = which(list_IDs == 1 | list_IDs == 2 |list_IDs == 9 | list_IDs == 14 |list_IDs == 17 | list_IDs == 57)
+      list_IDs = list_IDs[-rbind(index_delete)]
   }
 }
 
