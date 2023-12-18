@@ -110,83 +110,68 @@ list_IDs = good_match_bright$bestmatch[,1]
 #Manually iscar bad star images of the outer stack that could introduce error to the outer stack:
 
 if(region == 'G12'){
-  index_delete = which(list_IDs == 1 | list_IDs == 2 | list_IDs == 3| list_IDs == 10 | list_IDs == 23 | list_IDs == 24 | list_IDs == 44 | list_IDs == 49 | list_IDs == 51 | list_IDs == 52 | list_IDs == 57 | list_IDs == 61)
-  list_IDs = list_IDs[-rbind(index_delete)]
-}
-
-if(region == 'G12' & band == 'r'){
-  index_delete = which(list_IDs == 5 | list_IDs == 9 | list_IDs == 18 | list_IDs == 19 | list_IDs == 21 | list_IDs == 32 | list_IDs == 40 | list_IDs == 56 | list_IDs == 64 | list_IDs == 65)
-  list_IDs = list_IDs[-rbind(index_delete)]
-}
-
-if(region == 'G12' & band == 'Y'){
-  index_delete = which(list_IDs == 5 | list_IDs == 9 | list_IDs == 18 | list_IDs == 19 | list_IDs == 32 | list_IDs == 34 | list_IDs == 40 | list_IDs == 56 | list_IDs == 68)
-  list_IDs = list_IDs[-rbind(index_delete)]
-}
-
-if(region == 'G12' & band == 'Z'){
-  index_delete = which(list_IDs == 5 | list_IDs == 9 | list_IDs == 18 | list_IDs == 19 | list_IDs == 21 | list_IDs == 32 | list_IDs == 40 | list_IDs == 48 | list_IDs == 56 | list_IDs == 58 | list_IDs == 65 | list_IDs == 68)
-  list_IDs = list_IDs[-rbind(index_delete)]
+    index_delete = which(list_IDs == 1 | list_IDs == 2 | list_IDs == 3| list_IDs == 10 | list_IDs == 23 | list_IDs == 24 | list_IDs == 44 | list_IDs == 49 | list_IDs == 51 | list_IDs == 52 | list_IDs == 57 | list_IDs == 61)
+    list_IDs = list_IDs[-rbind(index_delete)]
+    if(band == 'r'){
+        index_delete = which(list_IDs == 5 | list_IDs == 9 | list_IDs == 18 | list_IDs == 19 | list_IDs == 21 | list_IDs == 32 | list_IDs == 40 | list_IDs == 56 | list_IDs == 64 | list_IDs == 65)
+        list_IDs = list_IDs[-rbind(index_delete)]
+    }
+    if(band == 'Y'){
+        index_delete = which(list_IDs == 5 | list_IDs == 9 | list_IDs == 18 | list_IDs == 19 | list_IDs == 32 | list_IDs == 34 | list_IDs == 40 | list_IDs == 56 | list_IDs == 68)
+        list_IDs = list_IDs[-rbind(index_delete)]
+    }
+    if(band == 'Z'){
+        index_delete = which(list_IDs == 5 | list_IDs == 9 | list_IDs == 18 | list_IDs == 19 | list_IDs == 21 | list_IDs == 32 | list_IDs == 40 | list_IDs == 48 | list_IDs == 56 | list_IDs == 58 | list_IDs == 65 | list_IDs == 68)
+        list_IDs = list_IDs[-rbind(index_delete)]
+    }
 }
 
 if(region == 'G02'){
-  index_delete = which(list_IDs == 1 | list_IDs == 12 | list_IDs == 25)
-  list_IDs = list_IDs[-rbind(index_delete)]
+    index_delete = which(list_IDs == 1 | list_IDs == 12 | list_IDs == 25)
+    list_IDs = list_IDs[-rbind(index_delete)]
+    if(band == 'Y'){
+        index_delete = which(list_IDs == 5)
+        list_IDs = list_IDs[-rbind(index_delete)]
+    }
+    if(band == 'Z'){
+        index_delete = which(list_IDs == 5 | list_IDs == 12 | list_IDs == 25)
+        list_IDs = list_IDs[-rbind(index_delete)]
+    }
 }
-
-if(region == 'G02'  & band == 'Y'){
-  index_delete = which(list_IDs == 5)
-  list_IDs = list_IDs[-rbind(index_delete)]
-}
-
-if(region == 'G02'  & band == 'Z'){
-  index_delete = which(list_IDs == 5 | list_IDs == 12 | list_IDs == 25)
-  list_IDs = list_IDs[-rbind(index_delete)]
-}
-
 
 if(region == 'G09'){
-  index_delete = which(list_IDs == 1 | list_IDs == 4 | list_IDs == 5 | list_IDs == 21 | list_IDs == 25 | list_IDs == 60 | list_IDs == 68 | list_IDs == 79 | list_IDs == 90)
-  list_IDs = list_IDs[-rbind(index_delete)]
-}
-
-if(region == 'G09' & band == 'Y'){
-  index_delete = which(list_IDs == 11 | list_IDs == 23 | list_IDs == 93)
-  list_IDs = list_IDs[-rbind(index_delete)]
-}
-
-if(region == 'G09' & band == 'r'){
-  index_delete = which(list_IDs == 11 | list_IDs == 54 | list_IDs == 70 | list_IDs == 80 )
-  list_IDs = list_IDs[-rbind(index_delete)]
-}
-
-if(region == 'G09' & band == 'Z'){
-  index_delete = which(list_IDs == 6 | list_IDs == 11 | list_IDs == 17 | list_IDs == 22 | list_IDs == 23 | list_IDs == 29| list_IDs == 55 | list_IDs == 57 | list_IDs == 65 | list_IDs == 93)
-  list_IDs = list_IDs[-rbind(index_delete)]
+   index_delete = which(list_IDs == 1 | list_IDs == 4 | list_IDs == 5 | list_IDs == 21 | list_IDs == 25 | list_IDs == 60 | list_IDs == 68 | list_IDs == 79 | list_IDs == 90)
+   list_IDs = list_IDs[-rbind(index_delete)]
+   if(band == 'Y'){
+       index_delete = which(list_IDs == 11 | list_IDs == 23 | list_IDs == 93)
+       list_IDs = list_IDs[-rbind(index_delete)]
+   }
+   if(band == 'r'){
+       index_delete = which(list_IDs == 11 | list_IDs == 54 | list_IDs == 70 | list_IDs == 80 )
+       list_IDs = list_IDs[-rbind(index_delete)]
+   }
+   if(band == 'Z'){
+       index_delete = which(list_IDs == 6 | list_IDs == 11 | list_IDs == 17 | list_IDs == 22 | list_IDs == 23 | list_IDs == 29| list_IDs == 55 | list_IDs == 57 | list_IDs == 65 | list_IDs == 93)
+       list_IDs = list_IDs[-rbind(index_delete)]
+   }
 }
 
 if(region == 'G15'){
   index_delete = which(list_IDs == 21 | list_IDs == 23  | list_IDs == 26 | list_IDs == 32 | list_IDs == 38 | list_IDs == 47 | list_IDs == 54 | list_IDs == 67)
   list_IDs = list_IDs[-rbind(index_delete)]
-}
-
-
-if(region == 'G15' & band == 'r'){
+if(band == 'r'){
   index_delete = which(list_IDs == 2 | list_IDs == 9 | list_IDs == 14 |list_IDs == 19 | list_IDs == 21 | list_IDs == 23  | list_IDs == 26 |list_IDs == 27 |list_IDs == 28 | list_IDs == 31 |list_IDs == 32 | list_IDs == 33 |list_IDs == 36 |list_IDs == 38 | list_IDs == 39 |list_IDs == 42  | list_IDs == 45  |list_IDs == 47 | list_IDs == 54 | list_IDs == 57  |list_IDs == 67)
   list_IDs = list_IDs[-rbind(index_delete)]
+  }
+  if(band == 'Y'){
+     index_delete = which(list_IDs == 2 | list_IDs == 14 |list_IDs == 17 | list_IDs == 19 |list_IDs == 27 | list_IDs == 28  | list_IDs == 30 |list_IDs == 33 |list_IDs == 34 | list_IDs == 39 |list_IDs == 45 | list_IDs == 41)
+     list_IDs = list_IDs[-rbind(index_delete)]
+  }
+  if(band == 'Z'){
+     index_delete = which(list_IDs == 1 | list_IDs == 2 |list_IDs == 9 | list_IDs == 14 |list_IDs == 17 | list_IDs == 57)
+     list_IDs = list_IDs[-rbind(index_delete)]
+  }
 }
-
-
-if(region == 'G15' & band == 'Y'){
-  index_delete = which(list_IDs == 2 | list_IDs == 14 |list_IDs == 17 | list_IDs == 19 |list_IDs == 27 | list_IDs == 28  | list_IDs == 30 |list_IDs == 33 |list_IDs == 34 | list_IDs == 39 |list_IDs == 45 | list_IDs == 41)
-  list_IDs = list_IDs[-rbind(index_delete)]
-}
-
-if(region == 'G15' & band == 'Z'){
-  index_delete = which(list_IDs == 1 | list_IDs == 2 |list_IDs == 9 | list_IDs == 14 |list_IDs == 17 | list_IDs == 57)
-  list_IDs = list_IDs[-rbind(index_delete)]
-}
-
 
 
 #We read the info from the fits files we just created
