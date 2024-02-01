@@ -413,7 +413,7 @@ dummy = foreach(ID = good_match_core$bestmatch[,1])%dopar%{
   
   segim = profoundProFound(good_star_cut, box=50)$segim #Run profound and select segmentation maps
  
-  good_star_cut_mask = segim > 0 | is.na(good_star_cut_mask) #Mask where we have positive segim or NA
+  good_star_cut_mask = segim > 0 | is.na(good_star_cut) #Mask where we have positive segim or NA
   
   good_star_cut$imDat[good_star_cut_mask > 0] = NA
   
