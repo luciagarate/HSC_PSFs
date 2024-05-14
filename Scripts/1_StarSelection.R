@@ -68,6 +68,13 @@ dummy = foreach(ID = good_match_outer$bestmatch[,1])%dopar%{
   sel_grid[,3] = sqrt(sel_grid[,1]^2 + sel_grid[,2]^2)
   sel_pix = which(sel_grid[,3] <  200)
   
+  if(band == 'r'){
+    bright_rad = (4001 -1L) / 2 
+    sel_grid = expand.grid(-bright_rad:bright_rad, -bright_rad:bright_rad)
+    sel_grid[,3] = sqrt(sel_grid[,1]^2 + sel_grid[,2]^2)
+    sel_pix = which(sel_grid[,3] <  340)
+  }
+  
   
   original = good_star_cut$imDat
   good_star_cut$imDat[good_star_cut_mask > 0] = NA #Puts NA where we have the mask

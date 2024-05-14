@@ -115,7 +115,7 @@ good_match_core = coordmatch(GAIA_core[,list(ra,dec)], temp_scan[,c("centre_RA",
 core_rad = (200-1)/2 #(Size of one core cutout - 1)/2
 sel_grid = expand.grid(-core_rad:core_rad, -core_rad:core_rad)
 sel_grid[,3] = sqrt(sel_grid[,1]^2 + sel_grid[,2]^2)
-sel_pix = which(sel_grid[,3]> 0 & sel_grid[,3] < 100)
+sel_pix = which(sel_grid[,3]> 10 & sel_grid[,3] < 15)
 
 
 foreach(ID = good_match_core$bestmatch[,1], .errorhandling = 'remove')%dopar%{
