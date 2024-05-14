@@ -119,19 +119,18 @@ sel_pix = which(sel_grid[,3]> 10 & sel_grid[,3] < 15)
 
 
 foreach(ID = good_match_core$bestmatch[,1], .errorhandling = 'remove')%dopar%{
-  temp_im = Rfits_read(paste0('/Path2StarFits/Core_Stars_',band,'/','GAIA_',formatC(ID,width=3,flag=0),'_orig.fits'))
   temp_mask = Rfits_read(paste0('/Path2StarFits/Core_Stars_',band,'/','GAIA_',formatC(ID,width=3,flag=0),'_mask.fits'))
   if(temp_mask[[1]]$keyvalues$MASK < 0.2){
     scale = median(temp_mask[[1]]$imDat[sel_pix], na.rm = TRUE)
     if(scale < 0){
       return(stop('Skipping', ID))
     }
-    if(which.max(temp_im[[1]]$imDat) != (core_rad*(core_rad*2 + 1) + core_rad + 1)){
+    if(which.max(temp_mask[[1]]$imDat) != (core_rad*(core_rad*2 + 1) + core_rad + 1)){
       #We only select the faintest stars that are exactly centred! This is, the stars that have the brightest pixel in the center
       return(stop('Skipping', ID))
     }
-    temp_im[[1]]$imDat = temp_im[[1]]$imDat/scale
-    temp_im[[1]]$imDat[is.nan(temp_im[[1]]$imDat)] = NA
+    temp_mask[[1]]$imDat = temp_mask[[1]]$imDat/scale
+    temp_mask[[1]]$imDat[is.nan(temp_mask[[1]]$imDat)] = NA
     Rfits_write_image(temp_mask[,]$imDat,paste0('/Path2StarFits/Core_Stars_',band,'/2Stack_masked/GAIA_',formatC(ID,width=3,flag=0),'_norm_mask.fits'))
   }else{
     return(stop('Skipping', ID))

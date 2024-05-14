@@ -44,7 +44,6 @@ dummy = foreach(ID = good_match_outer$bestmatch[,1])%dopar%{
   legend('topleft', legend=ID)
   dev.off()
   
-  #We create the fits files with the unmasked background sources that we'll stack later
   Rfits_write_image(good_star_cut, paste0('/Path2StarFits/Outer_Stars_',band,'/','GAIA_',formatC(ID,width=3,flag=0),'_orig.fits')) 
   
   #We mask the background sources:
