@@ -7,7 +7,7 @@ To download a single file, start by clicking the **Go to file** button at the to
 This will pull up a page that lists all of the files in the HSC_PSFs repository. 
 Select the folder PSF_fits and click on the file you wish to download to open the individual file. From here, click the **Raw** button at the top of the file, this will automatically save the file.
 
-To download the complete repository, use the command line *git-lfs clone <repository>*. Git LFS is a command line extension and specification for managing large files with Git, visit <https://github.com/git-lfs/git-lfs> to install it. This will download the entire GitHub repository as a compressed zipped folder. 
+To download the complete repository, use the command line *git-lfs clone <repository.>* Git LFS is a command line extension and specification for managing large files with Git, visit <https://github.com/git-lfs/git-lfs> to install it. This will download the entire GitHub repository as a compressed zipped folder. 
 
 The PSF FITS files are compressed FITS files of 4001x4001 pix<sup>2</sup>, where the second extension contains the matrix image.
 
