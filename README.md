@@ -9,7 +9,7 @@ Select the folder PSF_fits and click on the file you wish to download to open th
 
 To download the complete repository, use the command line *git-lfs clone <repository.>* Git LFS is a command line extension and specification for managing large files with Git, visit <https://github.com/git-lfs/git-lfs> to install it. This will download the entire GitHub repository as a compressed zipped folder. 
 
-The PSF FITS files are compressed FITS files of 4001x4001 pix<sup>2</sup>, where the second extension contains the matrix image.
+The PSF FITS files are compressed FITS files of 4001x4001 pix<sup>2</sup>, where the second extension contains the image data.
 
 ##  Scripts for PSF reconstruction
 The reconstruction of the PSF is divided into 3 scripts available at Scripts/: "1_StarSelection.R", "2_Stacking.R", and "3_Combining.R". "1_StarSelection.R" selects the coordinates of stars from the GAIA catalogue (available as CSV files at GAIA_catalogues/), finds the HSC image of each star, and creates cutouts. This is done for each region of the PSF (outer, middle, inner, and core) and per HSC band (g, r, i, Z, Y). The next step is "2_Stacking.R", which performs an stack of all the selected stars per PSF region and band.  In the last script, "3_Combining.R", we construct an HSC-SSP PDR3PSF per HSC band by combining the outer + middle + inner + core regions. The resulting stack is saved as a FITS file.
