@@ -2,7 +2,7 @@
 
 ## PSF fits files
 
-The HSC-SSP PDR3 PSF 2-D models are available as FITS files at Zenodo: https://zenodo.org/records/14915316.
+The HSC-SSP PDR3 PSF 2-D models are available as FITS files at Zenodo: https://zenodo.org/records/14915494.
 
 The PSF FITS files are compressed FITS files of 4001x4001 pix<sup>2</sup>, where the second extension contains the image data. These PSFs models are appropriate for the HSC-PDR3 intermediate-state data which do not have applied the final aggressive background subtraction. The intermediate-state data is especially stored for users interested in large extended objects
 
