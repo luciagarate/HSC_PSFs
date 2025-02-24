@@ -6,7 +6,7 @@ The HSC-SSP PDR3 PSF 2-D models are available as FITS files at Zenodo: https://z
 
 The PSF FITS files are compressed FITS files of 4001x4001 pix<sup>2</sup>, where the second extension contains the image data. These PSFs models are appropriate for the HSC-PDR3 intermediate-state data which do not have applied the final aggressive background subtraction. The intermediate-state data is especially stored for users interested in large extended objects
 
-There are two versions of each PSF file: symmetric (HSC_PSF_band.FITS) and assymetric (HSC_PSF_band_asymmetric.FITS). The first versions were obtained by applying an extra step to make them rotationally symmetric 2-D PSFs. The user should choose which one to use depending on their science goals. Check paper for more details: <https://arxiv.org/abs/2309.16244>.
+There are two versions of each PSF file: symmetric (HSC_PSF_band.FITS) and assymetric (HSC_PSF_band_asymmetric.FITS). The first versions were obtained by applying an extra step to make them rotationally symmetric 2-D PSFs. The user should choose which one to use depending on their science goals. Check paper for more details: <https://academic.oup.com/mnras/article/531/2/2517/7676869>.
 
 
 ##  Scripts for PSF reconstruction
